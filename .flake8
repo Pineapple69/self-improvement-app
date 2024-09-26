@@ -1,0 +1,6 @@
+[flake8]
+ignore = E211, E999, F401, F821, W503
+max-doc-length=100
+max-line-length=80
+exclude=
+    app/migrations/*
