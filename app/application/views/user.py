@@ -21,9 +21,10 @@ class UserLoginView(Resource):
         user = get_user_by_username(username)
         if not user or not check_password_hash(user.password, password):
             abort(401)
-        return {"message": f"{username} successfully logged in"}, (
-            200 if login_user(user) else abort(500)
-        )
+        if not login_user(user):
+            abort(400, message="Login failed")
+
+        return {"message": f"{username} successfully logged in"}, 200
 
 
 class UserSignUpView(Resource):
@@ -33,22 +34,18 @@ class UserSignUpView(Resource):
         username = user_sign_in["username"]
         if get_user_by_username(username):
             abort(409, message="User already exists")
-        user = User(
+        User(
             username=user_sign_in["username"],
             first_name=user_sign_in["first_name"],
             last_name=user_sign_in["last_name"],
             password=generate_password_hash(user_sign_in["password"]),
-        )
-        return {"message": f"{username} signed up successfully"}, (
-            200 if user.save() else abort(500)
-        )
+        ).save()
+        return {"message": f"{username} signed up successfully"}, 200
 
 
 class UserLogoutView(Resource):
     @login_required
     def post(self):
-        return (
-            {"message": "User logged out successfully"}
-            if logout_user()
-            else abort(500)
-        )
+        if not logout_user():
+            abort(400, "Logout failed")
+        return {"message": "User logged out successfully"}, 200

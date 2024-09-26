@@ -8,13 +8,9 @@ WORKDIR /app
 COPY pyproject.toml ./
 COPY poetry.lock ./
 
-RUN pip3 install --upgrade pip
-RUN pip3 install psycopg2-binary
-RUN pip3 install poetry==1.8.3
-RUN poetry config virtualenvs.create false
-RUN poetry install --no-root
+RUN pip3 install --upgrade pip && pip3 install poetry==1.8.3 && poetry config virtualenvs.create false  && poetry install --no-root
 
-COPY .. ./
+COPY . ./
 
 EXPOSE 5005
 ENTRYPOINT ["flask"]

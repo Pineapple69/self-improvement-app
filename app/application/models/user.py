@@ -11,7 +11,7 @@ def load_user(user_id):
 
 class User(BaseModel, UserMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str | None] = mapped_column(unique=True)
+    username: Mapped[str] = mapped_column(unique=True)
     first_name: Mapped[str]
     last_name: Mapped[str]
     password: Mapped[str]
