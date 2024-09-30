@@ -14,3 +14,7 @@ ReleaseSerializer = api.model(
     "Release",
     BaseReleaseSerializer | {"artist_name": fields.String()},
 )
+
+AddReleaseToCollectionSerializer = api.model(
+    "AddReleaseToCollection", {"release_id": fields.Integer()}
+)

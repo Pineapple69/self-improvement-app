@@ -8,6 +8,7 @@ from sqlalchemy import inspect
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+session = db.session
 
 T = TypeVar("T", bound="BaseModel")
 
@@ -15,7 +16,7 @@ T = TypeVar("T", bound="BaseModel")
 class BaseModel(db.Model):
     __abstract__ = True
 
-    id = db.Column(db.String(50), primary_key=True, nullable=False, unique=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     created = db.Column(db.DateTime(timezone=True), default=datetime.now)
     updated = db.Column(
         db.DateTime(timezone=True), default=datetime.now, onupdate=datetime.now
@@ -47,16 +48,16 @@ class BaseModel(db.Model):
         return self
 
     def delete(self) -> None:
-        db.session.delete(self)
+        session.delete(self)
         self.commit()
 
     def add(self: T) -> T:
-        db.session.add(self)
+        session.add(self)
         return self
 
     @classmethod
     def commit(cls) -> None:
-        db.session.commit()
+        session.commit()
 
     def to_dict(self):
         return {

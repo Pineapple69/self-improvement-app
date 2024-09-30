@@ -1,6 +1,7 @@
 from flask_login import UserMixin
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.application.models import Collection
 from app.application.models.base_model import BaseModel, login_manager
 
 
@@ -15,3 +16,4 @@ class User(BaseModel, UserMixin):
     first_name: Mapped[str]
     last_name: Mapped[str]
     password: Mapped[str]
+    collection: Mapped["Collection"] = relationship(back_populates="user")

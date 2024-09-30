@@ -1,15 +1,70 @@
 from flask import abort, request
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from flask_restx import Resource
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.application.api import api
+from app.application.models import Release, Collection
+from app.application.models.base_model import session
 from app.application.models.user import User
+from app.application.serializers.collection import CollectionSerializer
+from app.application.serializers.release import AddReleaseToCollectionSerializer
 from app.application.serializers.user import (
     UserLoginSerializer,
     UserSignUpSerializer,
 )
 from app.application.services.user import get_user_by_username
+
+
+class UserCollectionView(Resource):
+    @api.marshal_with(CollectionSerializer)
+    @login_required
+    def get(self):
+        return current_user.collection, 200
+
+    @api.expect(AddReleaseToCollectionSerializer)
+    @login_required
+    def post(self):
+        release_to_add = session.get(Release, request.json["release_id"])
+        if not release_to_add:
+            return {"message": "Release does not exist"}, 200
+
+        user_collection = current_user.collection
+        releases = current_user.collection.releases
+
+        try:
+            releases.index(release_to_add)
+            return {
+                "message": f"{release_to_add.name} already in collection"
+            }, 200
+        except ValueError:
+            pass
+
+        releases.append(release_to_add)
+        user_collection.save()
+        return {"message": f"{release_to_add.name} added to collection"}, 200
+
+    @login_required
+    def delete(self):
+        release_to_delete = session.get(Release, request.json["release_id"])
+        if not release_to_delete:
+            return {"message": "Release does not exist"}, 304
+
+        user_collection = current_user.collection
+        releases = user_collection.releases
+
+        try:
+            release_index = releases.index(release_to_delete)
+        except ValueError:
+            return {
+                "message": f"{release_to_delete.name} not in collection"
+            }, 304
+
+        del releases[release_index]
+        user_collection.save()
+        return {
+            "message": f"{release_to_delete.name} deleted from collection"
+        }, 200
 
 
 class UserLoginView(Resource):
@@ -39,6 +94,7 @@ class UserSignUpView(Resource):
             first_name=user_sign_in["first_name"],
             last_name=user_sign_in["last_name"],
             password=generate_password_hash(user_sign_in["password"]),
+            collection=Collection()
         ).save()
         return {"message": f"{username} signed up successfully"}, 200
 
