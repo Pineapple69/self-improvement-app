@@ -4,7 +4,7 @@ from flask_restx import Resource
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.application.api import api
-from app.application.models import Release, Collection
+from app.application.models import Collection, Release, Role
 from app.application.models.base_model import session
 from app.application.models.user import User
 from app.application.serializers.collection import CollectionSerializer
@@ -89,12 +89,14 @@ class UserSignUpView(Resource):
         username = user_sign_in["username"]
         if get_user_by_username(username):
             abort(409, message="User already exists")
+        user_role = session.query(Role).filter_by(name="user").first()
         User(
             username=user_sign_in["username"],
             first_name=user_sign_in["first_name"],
             last_name=user_sign_in["last_name"],
             password=generate_password_hash(user_sign_in["password"]),
-            collection=Collection()
+            collection=Collection(),
+            roles=[user_role],
         ).save()
         return {"message": f"{username} signed up successfully"}, 200
 

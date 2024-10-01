@@ -10,6 +10,9 @@ migrate:
 upgrade:
 	@{ docker-compose run app db upgrade; }
 
+downgrade:
+	@{ docker-compose run app db downgrade; }
+
 format:
 	black app tests
 	isort app tests

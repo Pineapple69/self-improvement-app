@@ -2,7 +2,7 @@ from flask_migrate import Migrate
 
 from app.application import app
 from app.application.api import api, blueprint
-from app.application.models.base_model import db, login_manager
+from app.application.models.base_model import authorize, db, login_manager
 from app.application.namespaces import self_improvement
 from app.application.routes import init_routes
 from app.config import Config
@@ -19,6 +19,7 @@ api.add_namespace(self_improvement, path="/self-improvement")
 db.init_app(app)
 migrate.init_app(app, db)
 login_manager.init_app(app)
+authorize.init_app(app)
 
 
 @app.route("/")

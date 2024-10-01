@@ -18,3 +18,10 @@ ReleaseSerializer = api.model(
 AddReleaseToCollectionSerializer = api.model(
     "AddReleaseToCollection", {"release_id": fields.Integer()}
 )
+
+AllReleasesSerializer = api.model(
+    "AllReleases",
+    {
+        "releases": fields.List(fields.Nested(ReleaseSerializer))
+    }
+)

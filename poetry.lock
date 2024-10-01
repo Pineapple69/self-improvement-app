@@ -221,6 +221,23 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-authorize"
+version = "0.2.7"
+description = "Flask plugin for content authorization and access control"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Flask-Authorize-0.2.7.tar.gz", hash = "sha256:b53fb2d7f78b8a9727937302de0f1917cbceab1978a4c20f1b556d76c6671dd5"},
+    {file = "Flask_Authorize-0.2.7-py2.py3-none-any.whl", hash = "sha256:f48f2274b7c77cac341e940ea5d93b5cac2512fa685a288adb6001cf811efb29"},
+]
+
+[package.dependencies]
+Flask = "*"
+Flask-SQLAlchemy = "*"
+six = "*"
+SQLAlchemy = "*"
+
+[[package]]
 name = "flask-login"
 version = "0.6.3"
 description = "User authentication and session management for Flask."
@@ -1028,6 +1045,17 @@ files = [
 ]
 
 [[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+files = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+
+[[package]]
 name = "sqlalchemy"
 version = "2.0.35"
 description = "Database Abstraction Library"
@@ -1187,4 +1215,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "9f45c71f4a87eb8e296eaa499f03e0d13ca08b70b3710696907e3be3e83a4883"
+content-hash = "a8c0e2ef3b6be3b8c9cf06fbe52b20a1facea35997ec3ebdc756d856a835e044"

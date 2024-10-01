@@ -2,11 +2,13 @@ from datetime import datetime
 from typing import Any, TypeVar
 
 from flask import abort
+from flask_authorize import Authorize
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 
 db = SQLAlchemy()
+authorize = Authorize()
 login_manager = LoginManager()
 session = db.session
 
