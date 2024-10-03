@@ -14,13 +14,14 @@ from app.application.serializers.user import (
     UserSignUpSerializer,
 )
 from app.application.services.user import get_user_by_username
+from app.application.types.collection import CollectionDto
 
 
 class UserCollectionView(Resource):
     @api.marshal_with(CollectionSerializer)
     @login_required
     def get(self):
-        return current_user.collection, 200
+        return CollectionDto(current_user.collection), 200
 
     @api.expect(AddReleaseToCollectionSerializer)
     @login_required
@@ -77,7 +78,7 @@ class UserLoginView(Resource):
         if not user or not check_password_hash(user.password, password):
             abort(401)
         if not login_user(user):
-            abort(400, message="Login failed")
+            abort(400, "Login failed")
 
         return {"message": f"{username} successfully logged in"}, 200
 
@@ -88,7 +89,7 @@ class UserSignUpView(Resource):
         user_sign_in = request.json
         username = user_sign_in["username"]
         if get_user_by_username(username):
-            abort(409, message="User already exists")
+            abort(409, "User already exists")
         user_role = session.query(Role).filter_by(name="user").first()
         User(
             username=user_sign_in["username"],

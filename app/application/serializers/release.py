@@ -4,6 +4,7 @@ from app.application.api import api
 from app.application.enums.release_type import ReleaseType
 
 BaseReleaseSerializer = {
+    "id": fields.Integer(),
     "type": fields.String(enum=ReleaseType),
     "genre": fields.String(),
     "release_date": fields.DateTime(),
@@ -17,11 +18,4 @@ ReleaseSerializer = api.model(
 
 AddReleaseToCollectionSerializer = api.model(
     "AddReleaseToCollection", {"release_id": fields.Integer()}
-)
-
-AllReleasesSerializer = api.model(
-    "AllReleases",
-    {
-        "releases": fields.List(fields.Nested(ReleaseSerializer))
-    }
 )

@@ -13,5 +13,4 @@ RUN pip3 install --upgrade pip && pip3 install poetry==1.8.3 && poetry config vi
 COPY . ./
 
 EXPOSE 5005
-ENTRYPOINT ["flask"]
-CMD ["--debug", "run", "-h", "0.0.0.0",  "-p", "8000"]
+CMD ["flask", "--debug", "run", "-h", "0.0.0.0",  "-p", "8000"]

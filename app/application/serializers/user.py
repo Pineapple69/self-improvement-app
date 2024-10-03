@@ -2,13 +2,25 @@ from flask_restx import fields
 
 from app.application.api import api
 
+UserBaseSerializer = {
+    "username": fields.String(),
+    "first_name": fields.String(),
+    "last_name": fields.String(),
+}
+
+UserSerializer = api.model(
+    "UserSerializer",
+    UserBaseSerializer
+    | {
+        "id": fields.Integer(),
+    },
+)
+
 UserSignUpSerializer = api.model(
     "UserSignIn",
-    {
-        "username": fields.String(),
+    UserBaseSerializer
+    | {
         "password": fields.String(),
-        "first_name": fields.String(),
-        "last_name": fields.String(),
     },
 )
 
