@@ -33,13 +33,10 @@ class UserCollectionView(Resource):
         user_collection = current_user.collection
         releases = current_user.collection.releases
 
-        try:
-            releases.index(release_to_add)
+        if release_to_add in releases:
             return {
                 "message": f"{release_to_add.name} already in collection"
             }, 200
-        except ValueError:
-            pass
 
         releases.append(release_to_add)
         user_collection.save()

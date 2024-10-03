@@ -18,7 +18,8 @@ def logged_in_user(api_client, app_url, roles) -> User:
         roles=[roles.get("user_role")],
     ).save()
     api_client.post(
-        f"{app_url}/user/login", json=dict(username=USERNAME, password=PASSWORD)
+        f"{app_url}/users/login",
+        json=dict(username=USERNAME, password=PASSWORD),
     )
     return user
 
@@ -52,7 +53,7 @@ def releases():
 
 
 def test_user_get_empty_collection(api_client, app_url, logged_in_user):
-    res = api_client.get(f"{app_url}/user/collection")
+    res = api_client.get(f"{app_url}/users/collection")
     assert res.status_code == 200
     assert res.json["user"].get("id") == logged_in_user.id
     assert res.json["releases"] == []
@@ -63,12 +64,12 @@ def test_user_edit_release_to_collection(
 ):
     release = releases[0]
     res = api_client.post(
-        f"{app_url}/user/collection", json=dict(release_id=release.id)
+        f"{app_url}/users/collection", json=dict(release_id=release.id)
     )
     assert res.status_code == 200
     assert res.json["message"] == f"{release.name} added to collection"
 
-    res = api_client.get(f"{app_url}/user/collection")
+    res = api_client.get(f"{app_url}/users/collection")
     assert res.status_code == 200
     assert res.json["releases"] == [
         dict(
@@ -81,23 +82,26 @@ def test_user_edit_release_to_collection(
         )
     ]
 
+
 def test_user_delete_from_collection(
     api_client, app_url, logged_in_user, releases
 ):
     release = releases[0]
     res = api_client.post(
-        f"{app_url}/user/collection", json=dict(release_id=release.id)
+        f"{app_url}/users/collection", json=dict(release_id=release.id)
     )
     assert res.status_code == 200
 
-    res = api_client.get(f"{app_url}/user/collection")
+    res = api_client.get(f"{app_url}/users/collection")
     assert res.status_code == 200
     assert len(res.json["releases"]) > 0
 
-    res = api_client.delete(f"{app_url}/user/collection", json=dict(release_id=release.id))
+    res = api_client.delete(
+        f"{app_url}/users/collection", json=dict(release_id=release.id)
+    )
     assert res.status_code == 200
     assert res.json["message"] == f"{release.name} deleted from collection"
 
-    res = api_client.get(f"{app_url}/user/collection")
+    res = api_client.get(f"{app_url}/users/collection")
     assert res.status_code == 200
     assert res.json["releases"] == []

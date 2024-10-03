@@ -12,23 +12,23 @@ from app.application.views.user import (
 
 def init_routes() -> None:
     # user
-    self_improvement.add_resource(UserLoginView, "/user/login")
-    self_improvement.add_resource(UserLogoutView, "/user/logout")
-    self_improvement.add_resource(UserSignUpView, "/user/signup")
-    self_improvement.add_resource(UserCollectionView, "/user/collection")
+    self_improvement.add_resource(UserLoginView, "/users/login")
+    self_improvement.add_resource(UserLogoutView, "/users/logout")
+    self_improvement.add_resource(UserSignUpView, "/users/signup")
+    self_improvement.add_resource(UserCollectionView, "/users/collection")
 
     # collection
     self_improvement.add_resource(
-        CollectionView, "/collection/<int:collection_id>", "/collection"
+        CollectionView, "/collections/<int:collection_id>", "/collections"
     )
 
     # artist
     self_improvement.add_resource(
-        ArtistView, "/artist/<int:artist_id>", "/artist"
+        ArtistView, "/artists/<int:artist_id>", "/artists"
     )
 
     # release
     self_improvement.add_resource(
-        ReleaseView, "/release/<int:release_id>", "/release"
+        ReleaseView, "/releases/<int:release_id>", "/releases"
     )
-    self_improvement.add_resource(ReleaseGetAll, "/release/get-all")
+    self_improvement.add_resource(ReleaseGetAll, "/releases/get-all")

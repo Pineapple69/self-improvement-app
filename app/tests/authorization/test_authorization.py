@@ -37,35 +37,35 @@ def artist() -> Artist:
 
 def test_user_post_on_restricted_resource(api_client, app_url):
     api_client.post(
-        f"{app_url}/user/login",
+        f"{app_url}/users/login",
         json=dict(username=USER_USERNAME, password=USER_PASSWORD),
     )
-    res = api_client.post(f"{app_url}/artist", json=dict(name="artist"))
+    res = api_client.post(f"{app_url}/artists", json=dict(name="artist"))
     assert res.status_code == 401
 
 
 def test_admin_post_on_restricted_resource(api_client, app_url):
     api_client.post(
-        f"{app_url}/user/login",
+        f"{app_url}/users/login",
         json=dict(username=ADMIN_USERNAME, password=ADMIN_PASSWORD),
     )
-    res = api_client.post(f"{app_url}/artist", json=dict(name="artist"))
+    res = api_client.post(f"{app_url}/artists", json=dict(name="artist"))
     assert res.status_code == 200
 
 
 def test_user_delete_on_restricted_resource(api_client, app_url, artist):
     api_client.post(
-        f"{app_url}/user/login",
+        f"{app_url}/users/login",
         json=dict(username=USER_USERNAME, password=USER_PASSWORD),
     )
-    res = api_client.delete(f"{app_url}/artist/{artist.id}")
+    res = api_client.delete(f"{app_url}/artists/{artist.id}")
     assert res.status_code == 401
 
 
 def test_admin_delete_on_restricted_resource(api_client, app_url, artist):
     api_client.post(
-        f"{app_url}/user/login",
+        f"{app_url}/users/login",
         json=dict(username=ADMIN_USERNAME, password=ADMIN_PASSWORD),
     )
-    res = api_client.delete(f"{app_url}/artist/{artist.id}")
+    res = api_client.delete(f"{app_url}/artists/{artist.id}")
     assert res.status_code == 200
